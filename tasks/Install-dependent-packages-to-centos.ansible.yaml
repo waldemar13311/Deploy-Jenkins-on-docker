@@ -1,0 +1,7 @@
+- name: "Install dependent packages"
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    pkg:
+      - python3-requests
+    state: present

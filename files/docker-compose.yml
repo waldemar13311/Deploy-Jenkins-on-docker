@@ -1,0 +1,18 @@
+services:
+  jenkins:
+    image: ${JENKINS_IMAGE}
+    hostname: jenkins.example.com
+    container_name: jenkins
+    entrypoint: sh /usr/local/bin/my-entrypoint.sh
+    environment:
+      TZ: ${TIMEZONE}
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ./my-entrypoint.sh:/usr/local/bin/my-entrypoint.sh
+      - ./jenkins_home:/var/jenkins_home
+    networks:
+      - jenkins-network
+networks:
+  jenkins-network:
