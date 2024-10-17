@@ -1,0 +1,23 @@
+- name: "Make the node an jenkins agent"
+  hosts: all
+  gather_facts: true
+  vars:
+    jenkins_agent_linux_user: "jenkins-agent-user"
+    jenkins_agent_linux_pass: "CHANGE_ME"
+
+  tasks:
+    - name: "Install dependent packages to Ubuntu"
+      ansible.builtin.include_tasks: tasks/agent-tasks/Install-dependent-packages-to-ubuntu-for-jenkins-agent.ansible.yaml
+      when: ansible_distribution == "Ubuntu"
+
+    - name: "Install dependent packages to CentOS"
+      ansible.builtin.include_tasks: tasks/agent-tasks/Install-dependent-packages-to-centos-for-jenkins-agent.ansible.yaml
+      when: ansible_distribution == "CentOS"
+
+    - name: "Create jenkins agent linux user"
+      become: true
+      ansible.builtin.user:
+        name: "{{ jenkins_agent_linux_user }}"
+        shell: "/bin/bash"
+        state: present
+        password: "{{ jenkins_agent_linux_pass | password_hash('sha512') }}"

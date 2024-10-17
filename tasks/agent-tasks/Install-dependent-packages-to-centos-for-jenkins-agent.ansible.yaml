@@ -1,0 +1,7 @@
+- name: "Install OpenJDK"
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    pkg:
+      - java-11-openjdk
+    state: present
